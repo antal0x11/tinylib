@@ -1,2 +1,2 @@
-# tinylib
-A minimal library api to insert and delete books in a database.
+## tinylib
+A minimal api to insert, delete and view books from a library.
