@@ -9,5 +9,4 @@ class TinylibApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

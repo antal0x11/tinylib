@@ -1,7 +1,7 @@
 package com.example.tinylib.controller;
 
-import com.example.tinylib.model.Book;
 import com.example.tinylib.model.responses.LibraryViewResponse;
+import com.example.tinylib.repository.LibraryBook;
 import com.example.tinylib.repository.LibraryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +21,12 @@ import java.util.List;
 public class LibraryBookViewController {
 
     /**
-     * The repository for accessing and retrieving the books from
-     * the library.
+     * The repository for accessing the library.
      */
-    private LibraryRepository libraryRepository;
+    private final LibraryRepository libraryRepository;
 
     /**
-     * Constructs a new LibraryBookViewController with the specified LibraryRepository.
+     * Constructs a new LibraryBookViewController with the specified libraryRepository.
      * @param libraryRepository The LibraryRepository instance to be injected.
      */
     @Autowired
@@ -42,20 +41,16 @@ public class LibraryBookViewController {
     @GetMapping(path="/api/library/view_books", produces = "application/json")
     public LibraryViewResponse ViewLibraryBooks() {
 
-        List<Book> bookList = new ArrayList<>();
-
-        libraryRepository.findAll().forEach( book -> {
-            Book tmpBook = new Book(book.getId(),book.getTitle(),book.getAuthor(), book.getCategory(), book.getCopies());
-            bookList.add(tmpBook);
-        });
-
         LocalDateTime timestampObj = LocalDateTime.now();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        List<LibraryBook> bookList = new ArrayList<>();
+
+        libraryRepository.findAll().forEach(bookList::add);
 
         return new LibraryViewResponse(
                 timestampObj.format(formatTime),
                 "/api/library/view_books",
-                HttpStatus.OK,
+                HttpStatus.OK.value(),
                 bookList.size(),
                 bookList);
     }
