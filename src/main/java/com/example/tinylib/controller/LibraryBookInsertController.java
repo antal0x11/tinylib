@@ -67,6 +67,16 @@ public class LibraryBookInsertController {
 
             BookInsertRequest req = objectMapper.readValue(request, BookInsertRequest.class);
             LibraryBook libraryBook = new LibraryBook(req);
+
+            String searchDuplicateTitle = libraryBook.getTitle();
+            int duplicate = libraryRepository.searchByTitle(searchDuplicateTitle);
+
+            if (duplicate != 0) return new BookInsertResponse("" +
+                    "Duplicate Book",
+                    "/api/library/insert_book",
+                    "aborted",
+                    HttpStatus.CONFLICT.value(),
+                    tm);
             libraryRepository.save(libraryBook);
 
             return new BookInsertResponse(
