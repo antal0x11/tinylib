@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -36,6 +38,21 @@ public class LibraryBook {
     private String author;
 
     /**
+     * The name of the publisher.
+     */
+    private String publisher;
+
+    /**
+     * The library location of the book.
+     */
+    private String location;
+
+    /**
+     * The insertion date of the book.
+     */
+    private String insertion_date;
+
+    /**
      * The number of copies of the book.
      */
     private int copies;
@@ -48,6 +65,9 @@ public class LibraryBook {
         this.title = null;
         this.category = null;
         this.author = null;
+        this.publisher = null;
+        this.location = null;
+        this.insertion_date = null;
         this.copies = 0;
     }
 
@@ -57,11 +77,20 @@ public class LibraryBook {
      * @param req The book request object.
      */
     public LibraryBook(BookInsertRequest req) {
+
         UUID uuid = UUID.randomUUID();
+
+        LocalDateTime timestampObj = LocalDateTime.now();
+        DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String tm = timestampObj.format(formatTime);
+
         this.id = uuid.toString();
         this.title = req.title();
         this.category = req.category();
         this.author = req.author();
+        this.publisher = req.publisher();
+        this.location = req.location();
+        this.insertion_date = tm;
         this.copies = req.copies();
     }
 
@@ -74,6 +103,9 @@ public class LibraryBook {
         this.title = book.getTitle();
         this.author = book.getAuthor();
         this.category = book.getCategory();
+        this.publisher = book.getPublisher();
+        this.location = book.getLocation();
+        this.insertion_date = book.getInsertion_date();
         this.copies = book.getCopies();
     }
 
@@ -110,7 +142,25 @@ public class LibraryBook {
     }
 
     /**
-     * Reuturns the number of the copies of the book.
+     * Return the publisher of the book.
+     * @return String The publisher of the book.
+     */
+    public String getPublisher() { return publisher; }
+
+    /**
+     * Return the location of the book.
+     * @return String The location where the book is.
+     */
+    public String getLocation() { return location; }
+
+    /**
+     * Return the insertion date and time of the book.
+     * @return String The insertion date and time of the book.
+     */
+    public String getInsertion_date() { return insertion_date; }
+
+    /**
+     * Returns the number of the copies of the book.
      * @return int The number of the copies of the book.
      */
     public int getCopies() {
@@ -148,6 +198,24 @@ public class LibraryBook {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    /**
+     * Updates the publisher of the book.
+     * @param publisher The publisher to set for the book.
+     */
+    public void setPublisher(String publisher) { this.publisher = publisher; }
+
+    /**
+     * Updates the location where the book is.
+     * @param location The location of the library to set for the book.
+     */
+    public void setLocation(String location) { this.location = location; }
+
+    /**
+     * Update the date and time that the book was inserted.
+     * @param insertion_date The date and time in format dd-MM-yyyy HH:mm:ss to set for the book.
+     */
+    public void setInsertion_date(String insertion_date) { this.insertion_date = insertion_date; }
 
     /**
      * Updates the number of copies of the book.

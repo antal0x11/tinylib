@@ -38,7 +38,7 @@ public class LibraryBookDeleteController {
         this.libraryRepository = libraryRepository;
     }
 
-    @DeleteMapping(path="/api/library/delete_book")
+    @DeleteMapping(path="/api/library/delete_book", consumes="application/json", produces = "application/json")
     @Transactional
     public BookDeleteResponse deleteLibraryBook(@RequestBody String request) {
 
