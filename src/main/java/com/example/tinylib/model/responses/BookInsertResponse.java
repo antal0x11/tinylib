@@ -15,5 +15,4 @@ public record BookInsertResponse(
         String path,
         String action,
         int status,
-        String timestamp) {
-}
+        String timestamp) { }

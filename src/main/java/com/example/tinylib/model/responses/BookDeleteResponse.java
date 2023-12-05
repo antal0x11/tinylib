@@ -13,5 +13,4 @@ public record BookDeleteResponse(
         String path,
         String action,
         int status,
-        String timestamp) {
-}
+        String timestamp) { }

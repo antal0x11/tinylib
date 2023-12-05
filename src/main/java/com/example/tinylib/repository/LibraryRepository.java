@@ -18,8 +18,16 @@ public interface LibraryRepository extends CrudRepository<LibraryBook,String> {
      * be increased.
      *
      * @param title The title of the book
-     * @return int The number of occurrences with the given title.
+     * @return The number of occurrences with the given title.
      */
     @Query(value ="SELECT COUNT(*) FROM LibraryBook WHERE title=:title")
     int searchByTitle(@Param("title") String title);
+
+    /**
+     * Returns the book with the given title if it exists in the library.
+     * @param title The title of the book to search for.
+     * @return The book if exists otherwise null.
+     */
+    @Query(value = "SELECT book FROM LibraryBook book WHERE book.title=:title")
+    LibraryBook retrieveBook(@Param("title") String title);
 }

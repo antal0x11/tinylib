@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
- * LibaryBook represents a book in the library.
+ * LibraryBook represents a book in the library.
  */
 @Entity
 @Table(name = "books")
@@ -82,7 +82,6 @@ public class LibraryBook {
 
         LocalDateTime timestampObj = LocalDateTime.now();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String tm = timestampObj.format(formatTime);
 
         this.id = uuid.toString();
         this.title = req.title();
@@ -90,7 +89,7 @@ public class LibraryBook {
         this.author = req.author();
         this.publisher = req.publisher();
         this.location = req.location();
-        this.insertion_date = tm;
+        this.insertion_date = timestampObj.format(formatTime);
         this.copies = req.copies();
     }
 
