@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * The LibraryBookSearch Controller is searching the library
@@ -42,14 +44,25 @@ public class LibraryBookSearchController {
      * @return An Object with the book if it exists, otherwise an object with
      *         the field book null.
      */
-    @PostMapping(value = "/api/library/search_book", produces = "application/json")
+    @PostMapping(value = "/api/library/search_book", consumes = "application/x-www-form-urlencoded", produces = "application/json")
     public BookSearchResponse searchBook(@RequestParam("title") String title) {
 
-        //TODO validate title;
+        /**
+         * ^[a-zA-Z ' : intended to match strings that contain only
+         * letters, spaces and '.
+         */
+        Pattern pattern = Pattern.compile("^[a-zA-Z ']+$");
+        Matcher matcher = pattern.matcher(title);
 
         LibraryBook searchBookResults = libraryRepository.retrieveBook(title);
         LocalDateTime timestampObj = LocalDateTime.now();
         DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        if(!matcher.matches()) return new BookSearchResponse(
+                timestampObj.format(formatTime),
+                "/api/library/search_book",
+                HttpStatus.BAD_REQUEST.value(),
+                null);
 
         if (searchBookResults == null) {
             return new BookSearchResponse(
